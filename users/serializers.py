@@ -34,3 +34,17 @@ class UserSerializer(serializers.Serializer):
             return User.objects.create_superuser(**validated_data)
 
         return User.objects.create_user(**validated_data)
+
+    def update(self, instance: User, validated_data: dict):
+        instance.first_name = validated_data.get("first_name", instance.first_name)
+        instance.email = validated_data.get("email", instance.email)
+        instance.last_name = validated_data.get("last_name", instance.last_name)
+        instance.birthdate = validated_data.get("birthdate", instance.birthdate)
+        instance.is_employee = validated_data.get("is_employee", instance.is_employee)
+        password = validated_data.get("password")
+        if password:
+            instance.set_password(password)
+
+        instance.save()
+
+        return instance
